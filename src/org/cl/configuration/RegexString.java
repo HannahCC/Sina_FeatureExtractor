@@ -4,7 +4,7 @@ public class RegexString {
 
 	public static final String Regex_theme = "#(\\w|[\\x{4e00}-\\x{9fa5}]|[-]|[_])*#";
 	public static final String Regex_at = "@(\\w|[\\x{4e00}-\\x{9fa5}]|[-]|[_])*(\\s|[:]|$)";
-	public static final String Regex_url = "(http|https):/+[\\w\\-_]?(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
+	public static final String Regex_url = "(http|https):/+[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&amp;:/~\\+#]*[\\w\\-\\@?^=%&amp;/~\\+#])?";
 	public static final String Regex_acronym = "[0-9]*[a-zA-Z]+[0-9]*[a-zA-Z]+[0-9]*";
 	public static final String Regex_emoticon_official = "[\\[][[\u4E00-\u9FFF]|[a-zA-Z]]{1,8}[\\]]";
 	public static final String Regex_emoticon_character = "[[\\p{P}+]|[ː¸˛˚˙ˇ˘˝´¨￣~$`^=\\|<>～｀＄＾＋＝｜＜＞￥×±÷≠≤≥∞∴♂♀ゝ∠⊥⌒∂\"∇Σ≡≒≌≦≧∽√∝∵∫∬∈∪∩∧∨￢⇒⇔∀∃∮ξζ∑∏℃ωっ□ 〓╳々ㄨヾ彡乂눈〆╭╮╰╯╱╲№㏇™℡ఠ ൠ®✧§≈卐≖Ψのㅂ㊣ミツ灬ρ≮≯∥﹤﹥じゞ☆ัლﻬ☄ஐ₪Þ௫ΩжфюЮ✙✉ಥ✌و✁❦❧❤❃❂❁❀✿ﾟ➳εїз♧●♋✈ぷ¤♩✰♥➽〠〄㍿♝♞➴➵㊚㊛㊙℗♯♪♫♬♭♮☪♈º큐©►◄☼♦◊◘◙๑ิ❊❋❄❅❇✱✲✳✾✺✹✸✶✵✷❖❥☇☈☉☊☋☌☍☑☒☢☸☹☺☻☽☾‾◡♠♡♢♣♤۩۞｡◕☀☁☂☃☄❉★இ◎◇◆■△▲▽▼◁◀▷▶⊙◈▣◐◑▒▤▥▨▧▦▩〇♨☜☞¶↕↗↙↖↘↑↓↔→←▁▂▃▄▅▆▇█〒▓⊕Θ◣◢◥◤⊿┇┅─│┌┐┘└├┬┤┴┼━┃┏┓┛┗┣┳┫┻╋┠┯┨┷┿┝┰┥┸╂┒¬┑┚┙┖┕┎┍┞┟┡┢┦┧┩┪┭┮┱┲┵┶┹┺┽┾╀╁╃╄╅╆╇╈╉╊╝╚╔╬╗═╓╩皿дДづロ▽凸目口人切拜咕囧冏莔表エェ王益艹罒ㄏㄟPqXYㄒTUZzMmvrzuOo0ー]]{2,10}";

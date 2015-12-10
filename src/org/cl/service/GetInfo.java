@@ -386,8 +386,22 @@ public class GetInfo {
 		br.close();
 	}
 
+	public static void getArrayMap(Map<String, float[]> array_map, int size, String filename,String regex1,String regex2,int i,int j) throws IOException {
+		File f1 = new File(Config.SAVE_PATH+filename);
+		BufferedReader br = new BufferedReader(new FileReader(f1));
+		String line;
+		while((line = br.readLine())!=null){
+			float[] array = new float[size];
+			String[] items = line.split(regex1);
+			String[] item = items[j].split(regex2);
+			for(int k=0;k<size;k++){array[k]=Float.parseFloat(item[k]);}
+			array_map.put(items[i], array);
+		}
+		br.close();
+	}
+
 	public static void getSetMap(Map<String, Set<String>> set_map,String filename,String regex1,String regex2,int i,int j) throws IOException {
-		File f1 = new File(filename);
+		File f1 = new File(Config.SAVE_PATH+filename);
 		BufferedReader br = new BufferedReader(new FileReader(f1));
 		String line;
 		while((line = br.readLine())!=null){
@@ -561,5 +575,6 @@ public class GetInfo {
 		}
 		b.close();
 	}
+
 
 }

@@ -36,7 +36,7 @@ public class Main_GetRelationFriFolTypeFeature {
 		int rel_type = 3;
 		//获取所有用户的信息
 		Map<String, Set<String>> user_type_info = new HashMap<String,Set<String>>();
-		GetInfo.getFriTypeInfo(user_type_info,"UserInfoTMP\\UserInfo0.txt.type","UserInfoTMP\\UserInfo1.txt.type");
+		GetInfo.getFriTypeInfo(user_type_info,"Feature_Relation\\VUser_type.txt");
 		
 		
 		RWUid y_ids = GetInfo.getUID("ExpandID0.txt");

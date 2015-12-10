@@ -143,7 +143,7 @@
 		x:y  x表示对应的tag或screenname等，y为对应用户使用该tag或screenname的次数。x与tag映射文件为Config\Dict_Tag.txt 。。。。。
 
 
-※Main_GetRelationFirFolTypeFeature：获取用户关注的（大V）用户、关注用户的（大V）用户的用户类别特征【用户级别】（备注：首先执行ClassifierUserByDict得到UserInfoTMP\UserInfoX.txt.（v）type文件）
+※Main_GetRelationFirFolTypeFeature：获取用户关注的（大V）用户、关注用户的（大V）用户的用户类别特征【用户级别】（备注：首先执行ClassifierUserByDict得到Feature_Relation\\VUser_type.txt文件）
 	=Feature_Relation：用户关注的用户以及关注用户的用户类别特征
 		-FriType_feature.txt  : 只使用朋友的数据
 		-FriFolType_feature.txt   ：使用朋友和粉丝的数据
@@ -160,6 +160,30 @@
 		被转发用户id:转发了该用户微博的次数
 
 ※Main_GetSrcFeature:获取用户的微博来源特征【用户级别】
+	=Feature_SRC
+		-Src_feature.txt【最终结果】
+		1715196817	0:15	1:3	13:4	14:1	28:1	35:1	42:3	43:1	44:32
+		-内容说明：x：y x表示Config\Dict_Src.txt中对应的src，y表示该src在用户微博中出现的次数
+		
+※Main_GetSrcTopicFeature:获取用户的微博来源特征【用户级别】（首先要得到Feature_SRC\\src_topic.txt）
+	**c0.人工准备Config\\Dict_SrcType.txt
+	**c1.由本工程的main.dict.FeatureDict中的getSrcDict()遍历微博，获得Config\\Dict_Src.txt、Config\\Src_Url.txt两个文件
+	**c2.由SinaApp_Crawler的爬虫根据Config\\Src_Url.txt访问对应的网页获取src的描述信息，以及网页已不存在的src，获得Feature_SRC\\Src_Description.txt、Feature_SRC\\Src_NotExist.txt两个文件
+	**c3.由王飞的百度爬虫根据Feature_SRC\\Src_NotExist.txt，获得各应用的搜索结果，将前10条结果的标题补充到Src_Description.txt中，另外手动对之前版本备份为Src_Description_OnlySinaWebSource.txt
+	//利用LDA得到Src属于各个Topic的概率分布，从而得到各用户
+	**c4.由JnaTest_NLPIR将Feature_SRC\\Src_Description.txt进行分词，得到Feature_SRC\\Src_Description.txt.parsed
+	**c5.由DataProcessor的RemoveWords将描述的分词文件进行清洗，得到Feature_SRC\\Src_Description.txt.parsed.clr
+	**6.创建Src_DescriptionLDA文件夹，对Feature_SRC\\Src_Description.txt.parsed.clr第一行添加文件的行数
+	**7.由JGibbLDA-v1.0对Feature_SRC\\Src_DescriptionLDA\\Src_Description.txt.parsed.clr进行训练，得到各文档属于各主题的可能性，即model-final.theta
+	**8.由DataProcessor的MergeDocument将Feature_SRC\\Src_Description.txt.parsed.clr与Feature_SRC\\Src_DescriptionLDA\\model-final.theta整合起来，将文档对应上概率分布，得到Feature_SRC\\src_topic.txt
+	=Feature_SRC
+		-SrcTopic_feature.txt【最终结果】
+		1596784950	0:0.8655	1:0.5656	...
+		1808041887	0:0.56554	1:0.5784	...
+		-内容说明：
+		x:y  x表示对应的srcTopic（未知，由LDA训练得到），y为对应用户属于topicN的可能性。
+
+※Main_GetSrcTypeFeature1:获取用户的微博来源特征【用户级别】
 	=Feature_SRC\Mobile【中间结果】
 		-uid.txt（SRC种类总是作为第一个特征）
 		src描述		src使用次数	src类别##判断src类别的依据	
@@ -187,6 +211,26 @@
 		1715196817	0:15	1:3	13:4	14:1	28:1	35:1	42:3	43:1	44:911
 		1677398887	0:13	1:3	2:1	3:7	14:1	28:1	33:1	42:1	43:1	44:863	
 		-内容说明：类似-Feature_SRC\\mobile_feature的内容说明。x与src类别映射文件为Config\Dict_AppType.txt
+
+※Main_GetSrcTypeFeature2:获取用户的微博来源特征【用户级别】（首先要得到Feature_SRC\\Src_type.txt）
+	**0.人工准备Config\\Dict_SrcType.txt
+	**1.由本工程的main.dict.FeatureDict中的getSrcDict()遍历微博，获得Config\\Dict_Src.txt、Config\\Src_Url.txt两个文件
+	**2.由SinaApp_Crawler的爬虫根据Config\\Src_Url.txt访问对应的网页获取src的描述信息，以及网页已不存在的src，获得Feature_SRC\\Src_Description.txt、Feature_SRC\\Src_NotExist.txt两个文件
+	**3.由王飞的百度爬虫根据Feature_SRC\\Src_NotExist.txt，获得各应用的搜索结果，将前10条结果的标题补充到Src_Description.txt中，另外手动对之前版本备份为Src_Description_OnlySinaWebSource.txt
+	**2-3.或者DataProcessor的ExtractInfo从已得到Feature_SRC\\Src_Description.txt中筛选出需要的src的描述
+	//利用描述信息对src分类
+	**4.由DataProcessor的ClassifierSrcByDict利用classiferSrc()方法,得到Src分类结果Feature_SRC\\Src_type1.txt、Feature_SRC\\Src_typeUndefined1.txt
+	//利用描述信息的关键字对src分类
+	**4.由JnaTest_NLPIR将Feature_SRC\\Src_Description.txt进行分词，得到Feature_SRC\\Src_Description.txt.parsed
+	**5.由DataProcessor的RemoveWords将描述的分词文件进行清洗，得到Feature_SRC\\Src_Description.txt.parsed.clr
+	**6.由DataProcessor的GetKeywords从Feature_SRC\\Src_Description.txt.parsed.clr挑选出出现频率超过N的词，并去重，得到Feature_SRC\\Src_Keywords.txt
+	**7.由DataProcessor的ClassifierSrcByDict利用classiferSrcWithKeyword()方法,得到Src分类结果Feature_SRC\\Src_type.txt、Feature_SRC\\Src_typeUndefined.txt
+	=Feature_SRC
+		-SrcType_feature.txt【最终结果】
+		1596784950	0:1	6:1	
+		1808041887	0:2	1:1	14:1
+		-内容说明：
+		x:y  x表示对应的src类别，y为对应用户使用该类别src的次数。x与src类别映射文件为Config\Dict_SrcType.txt
 
 ※Main_GetStyleFeatures：获取用户微博的风格特征（包括表情符号、流行用语、缩写词、标点符号、语气词特征）【微博级别-可以通过Main_FeatureToUserLevel改为用户级别，改变后格式见Main_FeatureToUserLevel内容说明】
 	=Feature_Style\Emotion：用户表情特征
@@ -225,9 +269,55 @@
 		43:1	53:1	98:1	
 		-内容说明：(类似Text)
 
-※Main_GetUserInfoFeature: 获取用户的Profile特征（描述、昵称、标签、认证原因等）
+※Main_GetUserInfoFeature: 获取用户的Profile特征（描述、昵称、标签、认证原因等   作为假词）
 	=Feature_UserInfo: 用户的Profile特征
 		-Tag_feature.txt
 		-DescriptionY_feature.txt
 		1812871717	1:1	2:6	4:1	5:1	7:1	17:1	18:6	19:1	20:1	25:1	28:1	34:2	35:3	36:1	40:4	
+		-内容说明：(类似Text)
+		
+※Main_GetUserInfoFeature2: 获取用户的Profile特征（描述、昵称、标签、认证原因等）
+	=Feature_UserInfo: 用户的Profile特征
+		-Profile_feature.txt
+		1812871717	1:1	2:0	3:1	4:0	5:1	6:0	7:1	8:4	9:1	10:0
 		-内容说明：
+		1.用户是否填写个人简介
+		2.用户是否有标签
+		3.用户是否填写个性域名
+		4.用户是否达人或认证
+		5.用户个人简介长度是否>平均数
+		6.用户标签个数是否>平均数
+		7.用户昵称长度是否>平均数
+		8.用户微博数是否>平均数
+		9.用户收藏数是否>平均数
+		10.用户使用年限>平均数
+		
+※Main_GetUserInfoFeature3: 获取用户的好友数特征
+	=Feature_UserInfo: 用户的Profile特征
+		-NeibourNum_feature.txt
+		1812871717	1:324	2:432	3:123	4:32	5:34	6:34	7:43	8:45	9:76	10:43
+		1.用户的关注数
+		2.用户的粉丝数
+		3.用户关注中达人用户数
+		4.用户关注中黄V用户数
+		5.用户关注中蓝V用户数
+		6.用户关注中已不存在用户数
+		7.用户粉丝中达人用户数
+		8.用户粉丝中黄V用户数
+		9.用户粉丝中蓝V用户数
+		10.用户粉丝中已不存在用户数
+
+※Main_GetUserInfoFeature4: 获取用户的好友比例特征
+	=Feature_UserInfo: 用户的Profile特征
+		-NeibourNum_feature.txt
+		1812871717	1:1	2:0	3:1	4:0	5:1	6:0	7:1	8:4	9:1	10:0	
+		1.用户的关注数是否>平均数
+		2.用户的粉丝数是否>平均数
+		3.用户关注中达人用户数是否>平均数
+		4.用户关注中黄V用户数是否>平均数
+		5.用户关注中蓝V用户数是否>平均数
+		6.用户关注中已不存在用户数是否<平均数
+		7.用户粉丝中达人用户数是否>平均数
+		8.用户粉丝中黄V用户数是否>平均数
+		9.用户粉丝中蓝V用户数是否>平均数
+		10.用户粉丝中已不存在用户数是否<平均数	

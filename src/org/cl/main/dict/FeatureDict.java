@@ -25,10 +25,10 @@ public class FeatureDict {
 	public static int threshold0 = 0;
 	public static int threshold1 = 0;
 	public static void main(String args[]) throws IOException{
-		/*getEmoticonDict();//manual+traverse(weibos)
-		getSrcDict();//traverse(weiboCon)*/
-		getTagDict("UserInfo0.txt",/*"UserInfoOfEnterprise0.txt",*/"UserInfo1.txt","UserInfoOfEnterprise1.txt");//traverse(UserInfo.txt)
-		getDescDict("UserInfo0.txt.description.parsed","UserInfo1.txt.description.parsed",/*"UserInfoOfEnterprise0.txt.description.parsed",*/"UserInfoOfEnterprise1.txt.description.parsed");//traverse
+		//getEmoticonDict();//manual+traverse(weibos)
+		getSrcDict();//traverse(weiboCon)
+		//getTagDict("UserInfo0.txt",/*"UserInfoOfEnterprise0.txt",*/"UserInfo1.txt","UserInfoOfEnterprise1.txt");//traverse(UserInfo.txt)
+		//getDescDict("UserInfo0.txt.description.parsed","UserInfo1.txt.description.parsed",/*"UserInfoOfEnterprise0.txt.description.parsed",*/"UserInfoOfEnterprise1.txt.description.parsed");//traverse
 		//getNgramDict("description","UserInfo0.txt","UserInfo1.txt");//traverse
 		//getNgramDict("screenName","UserInfo0.txt","UserInfo1.txt");//traverse
 		//getNgramDict("verifiedReason","UserInfo0.txt","UserInfo1.txt");//traverse
@@ -151,7 +151,8 @@ public class FeatureDict {
 	}
 
 	private static void getSrcDict() throws IOException {
-		Map<String,Integer> src_map = new HashMap<String,Integer>();
+		Map<String,String> src_map = new HashMap<String,String>();
+		Map<String,Integer> src_dict = new HashMap<String,Integer>();
 		//扫描微博内容文件获取词典
 		File f1=new File(Config.SAVE_PATH+"Weibos");
 		if(!f1.exists())return;
@@ -161,10 +162,13 @@ public class FeatureDict {
 			GetInfo.getList(f,src_list,true,"weibo","source");
 			for(String src:src_list){
 				String src_clean = Utils.clearSource(src);
-				Utils.putInMap(src_map, src_clean, 1);;
+				String src_href = Utils.getSource(src);
+				src_map.put(src_clean, src_href);
+				Utils.putInMap(src_dict, src_clean, 1);
 			}
 		}
-		Set<String> src_set = Utils.MapToSet(src_map, threshold1);
+		Set<String> src_set = Utils.MapToSet(src_dict, threshold1);
+		SaveInfo.saveMap("Config\\Src_Url.txt", src_map, src_set, false);
 		SaveInfo.saveDict("Config\\Dict_Src.txt",src_set,false,EncodeDict.Src);
 	}
 

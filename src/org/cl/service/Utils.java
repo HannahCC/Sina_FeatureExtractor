@@ -24,6 +24,8 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import net.sf.json.JSONObject;
+
 import org.cl.configuration.Config;
 import org.cl.configuration.RegexString;
 
@@ -34,7 +36,7 @@ public class Utils {
 		int y,mm,se;  
 		Calendar c = Calendar.getInstance();  
 		c.setTime(fileCreateDate);
-		y = c.get(Calendar.YEAR); //年  
+		y = c.get(Calendar.YEAR); //年 
 		//d = c.get(Calendar.DAY_OF_MONTH); //日  
 		mm = c.get(Calendar.MINUTE); //分
 		se = c.get(Calendar.SECOND);//秒
@@ -188,6 +190,62 @@ public class Utils {
 		return (time<=week);
 	}
 	/**
+	 * 判断一段文字中是否有手机号码
+	 * @param str
+	 * @return
+	 */
+	public static boolean HasPhone(String str){
+		boolean result = false;
+		String regex = "1([\\d]{10})|((\\+[0-9]{2,4})?\\(?[0-9]+\\)?-?)?[0-9]{7,8}";
+		Pattern p=Pattern.compile(regex);        
+		Matcher m=p.matcher(str);
+		boolean rs = m.find();
+		if(rs == true){
+			if((str.contains("Q")||str.contains("群")||str.contains("q"))!=true){
+				result = true;
+			}
+		}
+		return result;  
+	}
+	/**
+	 * 判断一段文字中是否有URL
+	 * @param str
+	 * @return
+	 */
+	public static boolean HasUrl(String urlstr){
+		String regex = "(http://|ftp://|https://|www){1}";
+		Pattern p=Pattern.compile(regex);        
+		Matcher m=p.matcher(urlstr);
+		boolean result = m.find();
+		return result;
+	}
+	/**
+	 * 判断一段文字中是否有EMAIL
+	 * @param str
+	 * @return
+	 */
+	public static boolean HasEmail(String emailstr){
+		String regex = "[a-zA-Z0-9][a-zA-Z0-9._-]{2,16}[a-zA-Z0-9]@[a-zA-Z0-9]+.[a-zA-Z0-9]+";
+		Pattern p=Pattern.compile(regex);        
+		Matcher m=p.matcher(emailstr);
+		boolean result = m.find();
+		return result;
+	}
+	/**
+	 * 判断一段文字中是否有QQ
+	 * @param str
+	 * @return
+	 */
+	public static boolean HasQQ(String qqstr){
+		String regex = null;
+		regex = "(Q|q|群){1}[^Z0-9]{0,8}[1-9][0-9]{5,9}$";
+		Pattern p=Pattern.compile(regex);        
+		Matcher m=p.matcher(qqstr);
+		boolean result = m.find();
+		return result;
+	}
+
+	/**
 	 * 清除原始微博中包含的转发前内容、以及链接
 	 * @param weibo_item
 	 * @return
@@ -223,7 +281,17 @@ public class Utils {
 		if(src.equals("")){return src;}
 		return src.substring(src.indexOf(">")+1,src.lastIndexOf("<"));
 	}
-
+	/**
+	 * 获取原始微博来源中来源的url
+	 * @param src
+	 * @return
+	 */
+	public static String getSource(String src) {
+		if(src.equals("null")){return null;}
+		if(src.equals("")){return src;}
+		String[] items = src.split("\\\"");
+		return items[1];
+	}
 	public static void mergeDict(Map<String, Integer> dict,Map<String, Integer> dict2) {
 		Iterator<Entry<String, Integer>> it = dict2.entrySet().iterator();
 		while(it.hasNext()){

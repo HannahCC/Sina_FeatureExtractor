@@ -6,23 +6,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
-
 import org.cl.service.GetInfo;
 import org.cl.service.SaveInfo;
 import org.cl.service.Utils;
 
 
-public class GetSrcFeature implements Runnable
+public class GetSrcTypeFeature2 implements Runnable
 {
 	/**用户ID*/
 	private String uid=null;
-	private Map<String, Integer> src_dict = null;
+	private Map<String, Set<String>> src_type_info = null;
 	private String result_file = null;
-	public GetSrcFeature(String uid,Map<String, Integer> src_dict,String result_file)
+	public GetSrcTypeFeature2(String uid,Map<String, Set<String>> src_type_info,String result_file)
 	{
 		this.uid=uid;
-		this.src_dict = src_dict;
+		this.src_type_info = src_type_info;
 		this.result_file = result_file;
 	}
 
@@ -34,14 +34,19 @@ public class GetSrcFeature implements Runnable
 			System.out.println(uid+"has no src!");
 			return;
 		}
-		Map<Integer,Integer> src_feature_type = new TreeMap<Integer,Integer>();
+		Map<Integer,Integer> src_type = new TreeMap<Integer,Integer>();
 		for(Entry<String, Integer> src_entry : src_map.entrySet()){
 			String src_name = src_entry.getKey();
-			int src_id = src_dict.get(src_name);
-			Utils.putInMap(src_feature_type, src_id, src_entry.getValue());
+			if(src_type_info.containsKey(src_name)){
+				Set<String>  src_type_set = src_type_info.get(src_name);
+				for(String type_str : src_type_set){
+					int type = Integer.parseInt(type_str);
+					Utils.putInMap(src_type, type, 1);
+				}
+			}
 		}
 		//VGroup.put(0, V_FRI_NUM);
-		SaveInfo.saveMap(result_file,uid,src_feature_type,true);
+		SaveInfo.saveMap(result_file,uid,src_type,true);
 	}
 
 	private Map<String, Integer> getSrcMap(){  

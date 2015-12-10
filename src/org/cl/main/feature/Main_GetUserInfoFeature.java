@@ -26,8 +26,8 @@ public class Main_GetUserInfoFeature {
 		getDescriFeature("UserInfoTMP\\UserInfo0.txt.description.parsed",Descri_dict,"");
 		//getDescriFeature("UserInfoTMP\\UserInfoOfEnterprise0.txt.description.parsed",Descri_dict,"");
 		getDescriFeature("UserInfoTMP\\UserInfo1.txt.description.parsed",Descri_dict,"");
-		getDescriFeature("UserInfoTMP\\UserInfoOfEnterprise1.txt.description.parsed",Descri_dict,"");*/
-		
+		getDescriFeature("UserInfoTMP\\UserInfoOfEnterprise1.txt.description.parsed",Descri_dict,"");
+		*/
 		/*//使用2gram分词，运行前首先使用other.GetUserInfoNgram对用户描述进行NGRAM分词，得到"Feature_UserInfo\\UserInfo0.txt.description.ngram"文件
 		Descri_dict = new HashMap<String,Integer>();
 		GetInfo.getDict("Config\\Dict_Description2.txt",Descri_dict);

@@ -25,6 +25,6 @@ public class testFF {
 		
 		GetFriFeature getFriFeature = new GetFriFeature(uid,result_filename,fri_info,fri_id_map,false);
 		getFriFeature.run();
-	}
+	} 
 
 }

@@ -18,49 +18,27 @@ public class Main_FeatureFilter {
 	public static void main(String args[]) throws IOException {
 		Set<String> id_set = new HashSet<String>();
 		GetInfo.getSet("ExpandID0.txt", id_set);
-/*
-		featureFilter(id_set,"Feature_UserInfo\\Tag_AvgVecIn18w.txt","Feature_UserInfo\\Tag_AvgVecIn18w_feature.txt");
+
+		/*featureFilter(id_set,"Feature_UserInfo\\Tag_AvgVecIn18w.txt","Feature_UserInfo\\Tag_AvgVecIn18w_feature.txt");
 		featureFilter(id_set,"Feature_UserInfo\\Tag_ConcVecIn18w.txt","Feature_UserInfo\\Tag_ConcVecIn18w_feature.txt");
 		featureFilter(id_set,"Feature_UserInfo\\Description_AvgVecIn18w.txt","Feature_UserInfo\\Description_AvgVecIn18w_feature.txt");
-		featureFilter(id_set,"Feature_UserInfo\\Description_ConcVecIn18w.txt","Feature_UserInfo\\Description_ConcVecIn18w_feature.txt");
+		featureFilter(id_set,"Feature_UserInfo\\Description_ConcVecIn18w.txt","Feature_UserInfo\\Description_ConcVecIn18w_feature.txt");*/
+		
+		
+		featureFilter(id_set,"Feature_Relation\\Line\\vec_1st.txt","Feature_Relation\\Line_vec_1st_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line\\vec_2nd.txt","Feature_Relation\\Line_vec_2nd_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line\\vec_all.txt","Feature_Relation\\Line_vec_all_feature.txt");
+		/*featureFilter(id_set,"Feature_Relation\\Line_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line1_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line1_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line2_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line2_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line3_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line3_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line4_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line4_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line5_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line5_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line6_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line6_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line7_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line7_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line8_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line8_Desc_Tag_Conc_18w_vec_all_feature.txt");
+		featureFilter(id_set,"Feature_Relation\\Line9_Tag_Desc_Conc\\vec_all.txt","Feature_Relation\\Line9_Desc_Tag_Conc_18w_vec_all_feature.txt");
 		*/
-		/*
-		featureFilter(id_set,"Feature_Relation\\Line_sample10000_d128\\vec_1st.txt","Feature_Relation\\Line_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line_sample10000_d128\\vec_2nd.txt","Feature_Relation\\Line_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line_sample10000_d128\\vec_all.txt","Feature_Relation\\line_vec_all_feature.txt");
-		*/
-		//mute_mute_fake
-		/*
-		featureFilter(id_set,"Feature_Relation\\Line8_Desc_Tag_Conc\\vec_1st.txt","Feature_Relation\\line8_Desc_Tag_Conc\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line8_Desc_Tag_Conc\\vec_2nd.txt","Feature_Relation\\line8_Desc_Tag_Conc\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line8_Desc_Tag_Conc\\vec_all.txt","Feature_Relation\\line8_Desc_Tag_Conc_18w_vec_all_feature.txt");
-		*/
-		/*featureFilter(id_set,"Feature_Relation\\Line1_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st.txt","Feature_Relation\\Line1_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line1_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd.txt","Feature_Relation\\Line1_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line1_Desc_Tag_Avg_18w_sample10000_d128\\vec_all.txt","Feature_Relation\\Line1_Desc_Tag_Avg_18w_vec_all_feature.txt");
-		
-		featureFilter(id_set,"Feature_Relation\\Line2_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st.txt","Feature_Relation\\Line2_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line2_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd.txt","Feature_Relation\\Line2_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line2_Desc_Tag_Avg_18w_sample10000_d128\\vec_all.txt","Feature_Relation\\Line2_Desc_Tag_Avg_18w_vec_all_feature.txt");
-		
-		featureFilter(id_set,"Feature_Relation\\Line3_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st.txt","Feature_Relation\\Line3_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line3_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd.txt","Feature_Relation\\Line3_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line3_Desc_Tag_Avg_18w_sample10000_d128\\vec_all.txt","Feature_Relation\\Line3_Desc_Tag_Avg_18w_vec_all_feature.txt");
-		
-		featureFilter(id_set,"Feature_Relation\\Line7_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st.txt","Feature_Relation\\line7_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line7_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd.txt","Feature_Relation\\line7_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line7_Desc_Tag_Avg_18w_sample10000_d128\\vec_all.txt","Feature_Relation\\line7_Desc_Tag_Avg_18w_vec_all_feature.txt");
-		
-		featureFilter(id_set,"Feature_Relation\\Line8_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st.txt","Feature_Relation\\line8_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line8_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd.txt","Feature_Relation\\line8_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line8_Desc_Tag_Avg_18w_sample10000_d128\\vec_all.txt","Feature_Relation\\line8_Desc_Tag_Avg_18w_vec_all_feature.txt");
-		
-		*/
-
-		featureFilter(id_set,"Feature_Relation\\Line9_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st.txt","Feature_Relation\\Line9_Desc_Tag_Avg_18w_sample10000_d128\\vec_1st_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line9_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd.txt","Feature_Relation\\Line9_Desc_Tag_Avg_18w_sample10000_d128\\vec_2nd_feature.txt");
-		featureFilter(id_set,"Feature_Relation\\Line9_Desc_Tag_Avg_18w_sample10000_d128\\vec_all.txt","Feature_Relation\\line9_Desc_Tag_Avg_18w_vec_all_feature.txt");
-		
 	}
 
 	private static void featureFilter(Set<String> id_set, String srcfile, String resfile) throws IOException {

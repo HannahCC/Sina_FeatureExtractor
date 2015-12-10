@@ -24,23 +24,15 @@ public class CommonTest {
 		System.out.println(str.length());
 	}
 	public static void test_regex_match(){
-		//String punc_regex = "[[\\p{P}+~$`^=|<>～｀＄＾＋＝｜＜＞￥×]&&[^@\\[\\]]]";//标点符号
-		//String acronym_regex = "[0-9]*[a-zA-Z]+[0-9]*[a-zA-Z]+[0-9]*";//acronym
-		//String emotion_regex = RegexString.Regex_punt;
-		String regex = "<[/]?[[a-zA-Z]]{2,10}>";
-		String context = "	<brithday></brithday>";
-		//String context = "～｀＝｜￥~~``!#$$%^&*()_++-=={}||\\:;'\",<>.?/·！￥＄＋…（）—【】、：；《，》＜＞。？＇．／＾＿＾｀｜•‥〃―＼～〝〞¡¿＂［］｛｝‘“”′″〔〕〈〉«»･｡「」『』︵︶︹︺ ︻︼︽︾＋－＜＝＞×＊＄％‰＃＆＠※†‡﹉﹊﹍﹎‖︴﹏﹋﹌ ";
-		//String context = "" +
-		//	"#竞拍iPhone6#谁说买iPhone6非！得！卖！肾！？参与竞拍还能以10%的价格轻松领走iPhone6！而且还免费抽iPad！保肾良方，一般人我不告诉他~ "+
-		//"直播开始ing，[撒花]@王昊-王厂长 大驾光临啦！小伙伴们准备嗨皮起来喽！参与直播互动留言 赢“2014 MOTOUR LIVE 魔途音乐节”入场门票！" +
-		//"我就是龙猫^_^.(←_←)..Heihei~!@#$%^&*()_+-={[]}|\\~`:;'\",<.>/?~！@#￥%……&*（）——+-=·；：‘“。《。》.435354SA3GF7,hfh.53,[doge][笑Cry][呵呵] [哈哈]";
+		String regex = RegexString.Regex_url;
+		String context = "www.youai000.com";//"http://douban.fm";//
 		Pattern p_at = Pattern.compile(regex);
 		Matcher m_at = p_at.matcher(context);
 		while(m_at.find()){
 			System.out.println(m_at.group());
 		}
 		String[] ma = context.split(regex);
-		System.out.println(ma[0]);
+		System.out.println("34"+ma[0]);
 		//System.out.println("\r\n"+m_at.replaceAll("##"));
 	}
 	public static void test_regex_spilt(){
@@ -164,6 +156,6 @@ public class CommonTest {
 		/*String str = "[36.66291,117.069664]";
 		str = str.replaceAll("\\[|\\]", "");
 		System.out.println(str);*/
-		test_regex_replace();
+		test_regex_match();
 	}
 }

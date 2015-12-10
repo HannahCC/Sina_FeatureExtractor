@@ -326,6 +326,24 @@ public class SaveInfo
 		w.flush();
 		w.close();
 	}
+	public static synchronized void saveArrMap(String filename, Map<String,Integer[]> map,boolean isAppend) throws IOException {
+		if(map==null||map.size()==0)return;
+		File f = new File(Config.SAVE_PATH+filename);
+		BufferedWriter w = new BufferedWriter(new FileWriter(f,isAppend));
+		Iterator<Entry<String, Integer[]>> it = map.entrySet().iterator();
+		while(it.hasNext()){
+			Entry<String, Integer[]> entry = it.next();
+			String key = entry.getKey();
+			Integer[] value = entry.getValue();
+			w.write(key+"\t");
+			for(int i=0;i<value.length;i++){
+				w.write((i+1)+":"+value[i]+"\t");
+			}
+			w.write("\r\n");
+		}
+		w.flush();
+		w.close();
+	}
 	public static synchronized void saveMap(String filename, Map<Integer,Integer> map,boolean isAppend) throws IOException {
 		if(map==null||map.size()==0)return;
 		File f = new File(Config.SAVE_PATH+filename);
@@ -350,6 +368,56 @@ public class SaveInfo
 				w.write(entry.getKey()+":"+entry.getValue()+"\t");
 			}
 			w.write("\r\n");
+			w.flush();
+			w.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 将map中 key存在于set的entry存储下来
+	 * @param filename
+	 * @param map
+	 * @param set
+	 * @param isAppend
+	 */
+	public static synchronized void saveMap(String filename, Map<String, String> map,Set<String> set, boolean isAppend) {
+		try {
+			if(map==null||map.size()==0)return;
+			File f = new File(Config.SAVE_PATH+filename);
+			BufferedWriter w = new BufferedWriter(new FileWriter(f,isAppend));
+			Iterator<Entry<String, String>> it = map.entrySet().iterator();
+			while(it.hasNext()){
+				Entry<String, String> entry = it.next();
+				if(set.contains(entry.getKey())){
+					w.write(entry.getKey()+"\t"+entry.getValue()+"\r\n");
+				}
+			}
+			w.flush();
+			w.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void saveSetMap(String filename, Map<String, Set<String>> set_map, boolean isAppend) {
+		try {
+			if(set_map==null||set_map.size()==0)return;
+			File f = new File(Config.SAVE_PATH+filename);
+			BufferedWriter w = new BufferedWriter(new FileWriter(f,isAppend));
+			Iterator<Entry<String, Set<String>>> it = set_map.entrySet().iterator();
+			while(it.hasNext()){
+				Entry<String, Set<String>> entry = it.next();
+				w.write(entry.getKey()+"\t");
+				Set<String> items = entry.getValue();
+				for(String item : items){
+					w.write(item+"##");
+				}
+				w.write("\r\n");
+			}
 			w.flush();
 			w.close();
 		} catch (IOException e) {
@@ -411,7 +479,6 @@ public class SaveInfo
 		w.flush();
 		w.close();
 	}
-
 
 
 
