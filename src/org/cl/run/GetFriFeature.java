@@ -38,8 +38,8 @@ public class GetFriFeature implements Runnable
 		if(fri_id_set.size()==0)return;
 
 		Map<Integer,Integer> user_fri_feature = new TreeMap<Integer,Integer>();
+		
 		//将自己的合并进来
-
 		Map<Integer, Integer> user_feature = null;
 		if(isWithSelf){
 			if(feature_map.containsKey(uid)){
@@ -47,7 +47,7 @@ public class GetFriFeature implements Runnable
 				Utils.mergeFeature(user_fri_feature, user_feature);
 			}
 		}
-		//合并朋友的
+		//合并朋友的  //未考虑朋友数的影响
 		for(String fri_id : fri_id_set){
 			if(feature_map.containsKey(fri_id)){
 				user_feature = feature_map.get(fri_id);

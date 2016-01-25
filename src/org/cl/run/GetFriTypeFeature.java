@@ -1,25 +1,24 @@
 package org.cl.run;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.cl.service.GetInfo;
 import org.cl.service.SaveInfo;
-import org.cl.service.Utils;
 
 
 public class GetFriTypeFeature implements Runnable
 {
 	/**用户ID*/
 	private String uid=null;
-	private Map<String, Set<String>> user_type_info = null;
+	private Map<String, double[]> user_type_info = null;
 	private String result = null;
 	private int rel_type = 0;
 
-	public GetFriTypeFeature(String uid,Map<String, Set<String>> user_type_info,String result,int rel_type)
+	public GetFriTypeFeature(String uid,Map<String, double[]> user_type_info,String result,int rel_type)
 	{
 		this.uid=uid;
 		this.user_type_info = user_type_info;
@@ -29,7 +28,7 @@ public class GetFriTypeFeature implements Runnable
 
 	public void run()
 	{
-		System.out.println("Getting UserType Feature of "+uid);
+		//System.out.println("Getting UserType Feature of "+uid);
 		Set<String> fri_id_set = new HashSet<String>();
 		try {
 			if((rel_type&1)>0)GetInfo.getRelUidSet(uid,fri_id_set,"UidInfo_friends0.txt");
@@ -38,21 +37,45 @@ public class GetFriTypeFeature implements Runnable
 			e.printStackTrace();
 		}
 		if(fri_id_set.size()==0)return;
-		
-		//int V_FRI_NUM = 0;
-		Map<Integer,Integer> user_type = new TreeMap<Integer,Integer>();
+
+		double[] user_type = null;
+		int count = 0;
 		for(String fri_id : fri_id_set){
 			if(user_type_info.containsKey(fri_id)){
-				//V_FRI_NUM++;
-				Set<String>  fri_type = user_type_info.get(fri_id);
-				for(String type_str : fri_type){
-					int type = Integer.parseInt(type_str);
-					Utils.putInMap(user_type, type, 1);
+				double[] fri_type = user_type_info.get(fri_id);
+				if(user_type==null){
+					user_type = Arrays.copyOf(fri_type, fri_type.length);//topic_possibility;
+				}else{
+					for(int i=0;i<fri_type.length;i++){
+						user_type[i] = (user_type[i]*count+fri_type[i])/(count+1);
+					}
 				}
+				count++;
 			}
 		}
 		//VGroup.put(0, V_FRI_NUM);
-		SaveInfo.saveMap(result,uid,user_type,true);
+		//SaveInfo.saveMap(result,uid,user_type,true);
 		
+		if(user_type==null){
+			System.out.println(uid+"has no V fri !");
+			return;
+		}
+		String user_type_feature = arraysToString(user_type);
+		//Arrays.toString(topic_possibility_avg);
+		try {
+			SaveInfo.saveString(result,uid+"\t"+user_type_feature,true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	//所有可能性统一乘以100
+	private String arraysToString(double[] topic_possibility_avg) {
+		StringBuffer sBuffer = new StringBuffer();
+		for(int i=1;i<=topic_possibility_avg.length;i++){
+			sBuffer.append(i+":"+topic_possibility_avg[i-1]+"\t");
+		}
+		return sBuffer.toString();
 	}
 }

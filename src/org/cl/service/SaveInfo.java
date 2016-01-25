@@ -356,12 +356,13 @@ public class SaveInfo
 		w.flush();
 		w.close();
 	}
-	public static synchronized void saveMap(String filename, String uid, Map<Integer,Integer> map,boolean isAppend) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static synchronized void saveMap(String filename, String uid, Map map,boolean isAppend) {
 		try {
 			if(map==null||map.size()==0)return;
 			File f = new File(Config.SAVE_PATH+filename);
 			BufferedWriter w = new BufferedWriter(new FileWriter(f,isAppend));
-			Iterator<Entry<Integer,Integer>> it = map.entrySet().iterator();
+			Iterator<Entry> it = map.entrySet().iterator();
 			w.write(uid+"\t");
 			while(it.hasNext()){
 				Entry<Integer,Integer> entry = it.next();
@@ -375,7 +376,23 @@ public class SaveInfo
 			e.printStackTrace();
 		}
 	}
-
+	public static synchronized void saveArray(String filename, String uid, int[] array,boolean isAppend) {
+		try {
+			if(array==null||array.length==0)return;
+			File f = new File(Config.SAVE_PATH+filename);
+			BufferedWriter w = new BufferedWriter(new FileWriter(f,isAppend));
+			w.write(uid+"\t");
+			for(int i=0;i<array.length;i++){
+				w.write(i+":"+array[i]+"\t");
+			}
+			w.write("\r\n");
+			w.flush();
+			w.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	/**
 	 * 将map中 key存在于set的entry存储下来
 	 * @param filename

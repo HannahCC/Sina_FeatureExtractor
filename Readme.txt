@@ -132,7 +132,8 @@
 		11.关注的共同普通好友数
 		12.关注的共同大V好友数
 
-※Main_GetRelationFirFolFeature：获取用户关注的用户特征【用户级别】（备注：首先执行Main_GetUserInfoFeature得到每个用户的特征Feature_UserInfo\UserInfoX.txt.description.parsed等文件）
+※Main_GetRelationFirFolFeature：获取用户关注的用户特征【用户级别】
+	**首先使用nlpir分词工具对用户描述进行分词，得到"Feature_UserInfo\\UserInfo0.txt.description.parsed"文件
 	=Feature_Relation：用户关注的用户类别特征(Y表示使用Ygram对用户的属性进行分词)
 		-Tag_feature.txt
 		-ScreenNameY_feature.txt
@@ -143,7 +144,8 @@
 		x:y  x表示对应的tag或screenname等，y为对应用户使用该tag或screenname的次数。x与tag映射文件为Config\Dict_Tag.txt 。。。。。
 
 
-※Main_GetRelationFirFolTypeFeature：获取用户关注的（大V）用户、关注用户的（大V）用户的用户类别特征【用户级别】（备注：首先执行ClassifierUserByDict得到Feature_Relation\\VUser_type.txt文件）
+※Main_GetRelationFirFolTypeFeature：获取用户关注的（大V）用户、关注用户的（大V）用户的用户类别特征【用户级别】
+	（备注：首先执行ClassifierUserByDict得到Feature_Relation\\VUser_type.txt文件）
 	=Feature_Relation：用户关注的用户以及关注用户的用户类别特征
 		-FriType_feature.txt  : 只使用朋友的数据
 		-FriFolType_feature.txt   ：使用朋友和粉丝的数据
@@ -159,11 +161,17 @@
 		-内容说明：
 		被转发用户id:转发了该用户微博的次数
 
-※Main_GetSrcFeature:获取用户的微博来源特征【用户级别】
+※Main_GetSrcFeature:获取用户的微博来源特征【用户级别】可能有三种结果，利用所有Src(1)，只利用App(2)，只利用mobile(3)
 	=Feature_SRC
-		-Src_feature.txt【最终结果】
+		-Src_feature.txt【最终结果1】
 		1715196817	0:15	1:3	13:4	14:1	28:1	35:1	42:3	43:1	44:32
-		-内容说明：x：y x表示Config\Dict_Src.txt中对应的src，y表示该src在用户微博中出现的次数
+		-内容说明1：x：y x表示Config\Dict_Src.txt中对应的src，y表示该src在用户微博中出现的次数或频率
+		-Src_feature.txt【最终结果2】
+		1715196817	0:15	1:3	13:4	14:1	28:1	35:1	42:3	43:1	44:32
+		-内容说明2：x：y x表示Config\Dict_App.txt中对应的src，y表示该app在用户微博中出现的次数或频率
+		-Src_feature.txt【最终结果3】
+		1715196817	0:15	1:3	13:4	14:1	28:1	35:1	42:3	43:1	44:32
+		-内容说明3：x：y x表示Config\Dict_Mobile.txt中对应的src，y表示该mobile在用户微博中出现的次数或频率
 		
 ※Main_GetSrcTopicFeature:获取用户的微博来源特征【用户级别】（首先要得到Feature_SRC\\src_topic.txt）
 	**c0.人工准备Config\\Dict_SrcType.txt
@@ -183,48 +191,19 @@
 		-内容说明：
 		x:y  x表示对应的srcTopic（未知，由LDA训练得到），y为对应用户属于topicN的可能性。
 
-※Main_GetSrcTypeFeature1:获取用户的微博来源特征【用户级别】
-	=Feature_SRC\Mobile【中间结果】
-		-uid.txt（SRC种类总是作为第一个特征）
-		src描述		src使用次数	src类别##判断src类别的依据	
-		SRC种类		1		0##
-		华为Ascend手机	8		3##华为
-	=Feature_SRC\App【中间结果】
-		SRC种类		27		0##
-		百度分享	2		42##分享
-		益动GPS		1		1##
-		......
-	=Feature_SRC
-		-Mobile_undefined.txt(未区分成功的mobile)【中间结果】
-		美图手机2	2	1##	
-	=Feature_SRC
-		-App_undefined.txt(未区分成功的app)【中间结果】
-		返还网	1	1##
-	=Feature_SRC
-		-Mobile_feature.txt【最终结果】
-		1596784950	0:1	6:1	
-		1808041887	0:2	1:1	14:1
-		-内容说明：
-		x:y  x表示对应的src类别，y为对应用户使用该类别src的次数。x与src类别映射文件为Config\Dict_MobileType.txt	
-	=Feature_SRC
-		-App_feature.txt【最终结果】
-		1715196817	0:15	1:3	13:4	14:1	28:1	35:1	42:3	43:1	44:911
-		1677398887	0:13	1:3	2:1	3:7	14:1	28:1	33:1	42:1	43:1	44:863	
-		-内容说明：类似-Feature_SRC\\mobile_feature的内容说明。x与src类别映射文件为Config\Dict_AppType.txt
-
-※Main_GetSrcTypeFeature2:获取用户的微博来源特征【用户级别】（首先要得到Feature_SRC\\Src_type.txt）
+※Main_GetSrcTypeFeature:获取用户的微博来源特征【用户级别】（首先要得到Feature_SRC\\Src_type.txt）
 	**0.人工准备Config\\Dict_SrcType.txt
 	**1.由本工程的main.dict.FeatureDict中的getSrcDict()遍历微博，获得Config\\Dict_Src.txt、Config\\Src_Url.txt两个文件
 	**2.由SinaApp_Crawler的爬虫根据Config\\Src_Url.txt访问对应的网页获取src的描述信息，以及网页已不存在的src，获得Feature_SRC\\Src_Description.txt、Feature_SRC\\Src_NotExist.txt两个文件
-	**3.由王飞的百度爬虫根据Feature_SRC\\Src_NotExist.txt，获得各应用的搜索结果，将前10条结果的标题补充到Src_Description.txt中，另外手动对之前版本备份为Src_Description_OnlySinaWebSource.txt
-	**2-3.或者DataProcessor的ExtractInfo从已得到Feature_SRC\\Src_Description.txt中筛选出需要的src的描述
+	**3.(ExtractInfo)由王飞的百度爬虫根据Feature_SRC\\Src_NotExist.txt，获得各应用的搜索结果，将前10条结果的标题补充到Src_Description.txt中，另外手动对之前版本备份为Src_Description_OnlySinaWebSource.txt
+	**3'.或者由DataProcessor的ExtractInfo从已得到Feature_SRC\\Src_Description.txt中筛选出需要的src的描述
 	//利用描述信息对src分类
 	**4.由DataProcessor的ClassifierSrcByDict利用classiferSrc()方法,得到Src分类结果Feature_SRC\\Src_type1.txt、Feature_SRC\\Src_typeUndefined1.txt
 	//利用描述信息的关键字对src分类
 	**4.由JnaTest_NLPIR将Feature_SRC\\Src_Description.txt进行分词，得到Feature_SRC\\Src_Description.txt.parsed
 	**5.由DataProcessor的RemoveWords将描述的分词文件进行清洗，得到Feature_SRC\\Src_Description.txt.parsed.clr
 	**6.由DataProcessor的GetKeywords从Feature_SRC\\Src_Description.txt.parsed.clr挑选出出现频率超过N的词，并去重，得到Feature_SRC\\Src_Keywords.txt
-	**7.由DataProcessor的ClassifierSrcByDict利用classiferSrcWithKeyword()方法,得到Src分类结果Feature_SRC\\Src_type.txt、Feature_SRC\\Src_typeUndefined.txt
+	**7.由DataProcessor的ClassifierSrcByDict利用classiferSrcWithKeyword()方法,得到Src分类结果Feature_SRC\\Src_type2.txt、Feature_SRC\\Src_typeUndefined2.txt
 	=Feature_SRC
 		-SrcType_feature.txt【最终结果】
 		1596784950	0:1	6:1	

@@ -13,7 +13,7 @@ public class Config
 
 	
 	/** 所有信息保存地址*/
-	public static String SAVE_PATH="D:\\Project_DataMinning\\Data\\Sina_res\\Sina_NLPIR400_Good\\"; 
+	public static String SAVE_PATH="D:\\Project_DataMinning\\Data\\Sina_res\\Sina_NLPIR2223_GenderPre\\"; 
 	//public static String SAVE_PATH="D:\\Project_DataMinning\\Data\\Sina_res\\Sina_GenderPre\\"; 
 
 	/** 程序最大连续请求次数（建议10000-20000）*/

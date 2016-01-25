@@ -24,8 +24,6 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.sf.json.JSONObject;
-
 import org.cl.configuration.Config;
 import org.cl.configuration.RegexString;
 
@@ -320,6 +318,13 @@ public class Utils {
 		return feature_map;
 	}
 
+	public static void putInMap( Map<Integer, Float> map,int index,float value) {
+		if(map.containsKey(index)){
+			map.put(index,map.get(index)+value);
+		}else{
+			map.put(index,value);
+		}
+	}
 
 	public static void putInMap( Map<Integer, Integer> map,int index,int value) {
 		if(map.containsKey(index)){

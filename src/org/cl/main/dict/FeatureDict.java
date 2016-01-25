@@ -1,9 +1,12 @@
 package org.cl.main.dict;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,8 +29,11 @@ public class FeatureDict {
 	public static int threshold1 = 0;
 	public static void main(String args[]) throws IOException{
 		//getEmoticonDict();//manual+traverse(weibos)
-		getSrcDict();//traverse(weiboCon)
-		//getTagDict("UserInfo0.txt",/*"UserInfoOfEnterprise0.txt",*/"UserInfo1.txt","UserInfoOfEnterprise1.txt");//traverse(UserInfo.txt)
+		//getSrcDict();//traverse(weiboCon)
+		//getDictFromManualDict("Dict_Mobile.txt",0,"Dict_Mobile.txt");//根据dict_src.txt中src的名称，得到Dict_mobile词典（珍妮做的），将src中的mobile分离出来重新编码
+		//getDict("Dict_Mobile.txt",0,"Dict_Src.txt","Dict_App.txt");//将src中mobile分离出来后剩余的src作为APP，重新编码
+		//getVFriDict("UserInfo1.txt");
+		getTagDict("UserInfo0.txt"/*,"UserInfoOfEnterprise0.txt","UserInfo1.txt","UserInfoOfEnterprise1.txt"*/);//traverse(UserInfo.txt)
 		//getDescDict("UserInfo0.txt.description.parsed","UserInfo1.txt.description.parsed",/*"UserInfoOfEnterprise0.txt.description.parsed",*/"UserInfoOfEnterprise1.txt.description.parsed");//traverse
 		//getNgramDict("description","UserInfo0.txt","UserInfo1.txt");//traverse
 		//getNgramDict("screenName","UserInfo0.txt","UserInfo1.txt");//traverse
@@ -52,6 +58,46 @@ public class FeatureDict {
 		getDictFromManualDict("Dict_Behaviour31.txt",0,"Dict_Behaviour31.txt");//manual
 		getDictFromManualDict("Dict_Behaviour2.txt",0,"Dict_Behaviour2.txt");//manual*/	
 	}
+	private static void getVFriDict(String ... filenames) throws IOException {
+		Set<String> vfri_set = new HashSet<String>();
+		for(String filename : filenames){
+			File fr1 = new File(Config.SAVE_PATH+filename);
+			BufferedReader r1 = new BufferedReader(new FileReader(fr1));
+			String line = "";
+			while((line = r1.readLine())!=null){
+				JSONObject user = JSONObject.fromObject(line);
+				String uid = user.getString("id");
+				int type = user.getInt("verifiedType");
+				if(type<0||type>7){continue;}
+				vfri_set.add(uid);
+			}
+			r1.close();
+		}
+		SaveInfo.saveDict("Config\\Dict_VFri.txt",vfri_set,false,0);
+	}
+	private static void getDict(String newdict, int start_index, String srcdict, String ... exceptdicts) throws IOException {
+		Set<String> except_set = new HashSet<String>(); 
+		for(String exceptdict : exceptdicts){
+			GetInfo.getSet("Config\\"+exceptdict,except_set,"\t",0);
+		}
+		File r=new File(Config.SAVE_PATH+"Config\\"+srcdict);
+		BufferedReader br=new BufferedReader(new FileReader(r));
+		File f = new File(Config.SAVE_PATH+"Config\\"+newdict);
+		BufferedWriter w = new BufferedWriter(new FileWriter(f));
+		int i = start_index;
+		String line="";
+		while((line=br.readLine())!=null)
+		{
+			if(!(line.equals(""))){
+				String item = line.split("\t")[0];
+				if(except_set.contains(item))continue;
+				w.write(item+"\t"+(i++)+"\r\n");
+			}
+		}
+		br.close();
+		w.flush();
+		w.close();
+	}
 	//扫描文件内容获取词典
 	private static void getDictByTravse(String newdict,int start_index,String regex,int threshold) throws IOException {
 		Set<String> set = new HashSet<String>();
@@ -62,7 +108,7 @@ public class FeatureDict {
 	private static void getDictFromManualDict(String newdict, int start_index,String ... manual_dicts) throws IOException {
 		List<String> list = new ArrayList<String>(); 
 		for(String manual_dict : manual_dicts){
-			GetInfo.getList("Config\\manual\\"+manual_dict,list,"\\s+",0,true);
+			GetInfo.getList("Config\\manual\\"+manual_dict,list,"\t",0,true);
 		}
 		SaveInfo.saveDict("Config\\"+newdict,list,false,start_index);
 	}
@@ -131,7 +177,7 @@ public class FeatureDict {
 			String line = null;
 			while(null!=(line = r.readLine())){
 				JSONObject user = JSONObject.fromObject(line);
-				
+
 				String user_attr = user.getString(attr);
 				List<String> user_attr_ngram = Utils.toNgram(user_attr, 2);
 				for(String ngram : user_attr_ngram){

@@ -43,8 +43,8 @@ public class Main_GetUserInfoFeature {
 		GetInfo.getDict("Config\\Dict_Tag.txt",Tag_dict);
 		getTagFeature("UserInfo0.txt",Tag_dict);
 		//getTagFeature("UserInfoOfEnterprise0.txt",Tag_dict);
-		getTagFeature("UserInfo1.txt",Tag_dict);
-		getTagFeature("UserInfoOfEnterprise1.txt",Tag_dict);
+		/*getTagFeature("UserInfo1.txt",Tag_dict);
+		getTagFeature("UserInfoOfEnterprise1.txt",Tag_dict);*/
 	}
 	
 	private static void getDescriFeature(String filename,Map<String, Integer> descri_dict,String gram) throws IOException {

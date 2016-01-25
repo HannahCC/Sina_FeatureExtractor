@@ -24,8 +24,8 @@ public class CommonTest {
 		System.out.println(str.length());
 	}
 	public static void test_regex_match(){
-		String regex = RegexString.Regex_url;
-		String context = "www.youai000.com";//"http://douban.fm";//
+		String regex = "(^n.*)|(^v.*)|(^a.*)|(^b.*)";
+		String context = "retr";//"http://douban.fm";//
 		Pattern p_at = Pattern.compile(regex);
 		Matcher m_at = p_at.matcher(context);
 		while(m_at.find()){

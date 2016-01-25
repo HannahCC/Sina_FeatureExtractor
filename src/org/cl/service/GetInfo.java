@@ -179,7 +179,9 @@ public class GetInfo {
 		{
 			if(!(line.equals(""))){
 				String item = line.split(regex)[i];
-				if(isCleared&&lines.contains(item)){continue;}
+				if(isCleared&&lines.contains(item)){
+					continue;
+				}
 				lines.add(item);
 			}
 		}
@@ -386,15 +388,37 @@ public class GetInfo {
 		br.close();
 	}
 
-	public static void getArrayMap(Map<String, float[]> array_map, int size, String filename,String regex1,String regex2,int i,int j) throws IOException {
+	public static void getMapMap(String filename, Map<String, Map<String, Integer>> map_map,String regex1,String regex2,int key_index) throws IOException {
 		File f1 = new File(Config.SAVE_PATH+filename);
 		BufferedReader br = new BufferedReader(new FileReader(f1));
 		String line;
 		while((line = br.readLine())!=null){
-			float[] array = new float[size];
+			String[] items = line.split(regex1);
+			Map<String, Integer> map = new HashMap<String, Integer>();
+			for(int i=key_index+1;i<items.length;i++){
+				String[] items2 = items[i].split(regex2);
+				if(items2.length==2){
+					Utils.putInMap(map, items2[0], Integer.parseInt(items2[1]));
+				}else{
+					String key = items2[0];
+					for(int j=1;j<items2.length-1;j++){key+=":"+items2[j];}
+					Utils.putInMap(map, key, Integer.parseInt(items2[items2.length-1]));
+				}
+			}
+			map_map.put(items[key_index], map);
+		}
+		br.close();
+	}
+
+	public static void getArrayMap(Map<String, double[]> array_map, int size, String filename,String regex1,String regex2,int i,int j) throws IOException {
+		File f1 = new File(Config.SAVE_PATH+filename);
+		BufferedReader br = new BufferedReader(new FileReader(f1));
+		String line;
+		while((line = br.readLine())!=null){
+			double[] array = new double[size];
 			String[] items = line.split(regex1);
 			String[] item = items[j].split(regex2);
-			for(int k=0;k<size;k++){array[k]=Float.parseFloat(item[k]);}
+			for(int k=0;k<size;k++){array[k]=Double.parseDouble(item[k]);}
 			array_map.put(items[i], array);
 		}
 		br.close();
@@ -413,6 +437,7 @@ public class GetInfo {
 		}
 		br.close();
 	}
+	
 	public static void getMapList(String filename,List<Map<Integer, Integer>> emotion_map_list) throws IOException {
 		File r=new File(Config.SAVE_PATH+filename);
 		BufferedReader br=new BufferedReader(new FileReader(r));
@@ -438,7 +463,7 @@ public class GetInfo {
 	 * @return
 	 * @throws IOException 
 	 */
-	public static void getFriTypeInfo(Map<String,Set<String>> user_info,String... filenames) throws IOException{
+	/*public static void getFriTypeInfo(Map<String,Set<String>> user_info,String... filenames) throws IOException{
 		for(String filename : filenames){
 			File r=new File(Config.SAVE_PATH+filename);
 			BufferedReader br=new BufferedReader(new FileReader(r));
@@ -458,8 +483,34 @@ public class GetInfo {
 			}
 			br.close();
 		}
+	}*/
+	/**
+	 * 从filename.txt文件中获取用户的类别信息，存入Map<String,Set<String>> user_info,其中key是id,value为用户所属的类别（一个用户可以属于多个类别）
+	 * @param filenames
+	 * @return
+	 * @throws IOException 
+	 */
+	public static void getTagTypeInfo(Map<String,Set<String>> user_info,String... filenames) throws IOException{
+		for(String filename : filenames){
+			File r=new File(Config.SAVE_PATH+filename);
+			BufferedReader br=new BufferedReader(new FileReader(r));
+			String line=null;
+			while((line=br.readLine())!=null)
+			{
+				if(!(line.equals(""))){
+					String[] item = line.split("\t");
+					String id = item[0];
+					Set<String> user_type = new HashSet<String>();
+					for(int i=1;i<item.length;i++){
+						String type = item[i].split("##")[0];
+						user_type.add(type);
+					}
+					user_info.put(id, user_type);
+				}
+			}
+			br.close();
+		}
 	}
-
 	/**
 	 * 从filename.txt文件中获取用户的特征信息，存入Map<String,Set<String>> user_info,其中key是id,value为用户所属的类别（一个用户可以属于多个类别）
 	 * @param filenames
