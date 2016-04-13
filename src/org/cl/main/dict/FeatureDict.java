@@ -32,8 +32,9 @@ public class FeatureDict {
 		//getSrcDict();//traverse(weiboCon)
 		//getDictFromManualDict("Dict_Mobile.txt",0,"Dict_Mobile.txt");//根据dict_src.txt中src的名称，得到Dict_mobile词典（珍妮做的），将src中的mobile分离出来重新编码
 		//getDict("Dict_Mobile.txt",0,"Dict_Src.txt","Dict_App.txt");//将src中mobile分离出来后剩余的src作为APP，重新编码
+		getFriDict("UserInfo1.txt");
 		//getVFriDict("UserInfo1.txt");
-		getTagDict("UserInfo0.txt"/*,"UserInfoOfEnterprise0.txt","UserInfo1.txt","UserInfoOfEnterprise1.txt"*/);//traverse(UserInfo.txt)
+		//getTagDict("UserInfo0.txt"/*,"UserInfoOfEnterprise0.txt","UserInfo1.txt","UserInfoOfEnterprise1.txt"*/);//traverse(UserInfo.txt)
 		//getDescDict("UserInfo0.txt.description.parsed","UserInfo1.txt.description.parsed",/*"UserInfoOfEnterprise0.txt.description.parsed",*/"UserInfoOfEnterprise1.txt.description.parsed");//traverse
 		//getNgramDict("description","UserInfo0.txt","UserInfo1.txt");//traverse
 		//getNgramDict("screenName","UserInfo0.txt","UserInfo1.txt");//traverse
@@ -57,6 +58,21 @@ public class FeatureDict {
 		getDictFromManualDict("Dict_Behaviour32.txt",0,"Dict_Behaviour32.txt");//manual
 		getDictFromManualDict("Dict_Behaviour31.txt",0,"Dict_Behaviour31.txt");//manual
 		getDictFromManualDict("Dict_Behaviour2.txt",0,"Dict_Behaviour2.txt");//manual*/	
+	}
+	private static void getFriDict(String ... filenames) throws IOException {
+		Set<String> vfri_set = new HashSet<String>();
+		for(String filename : filenames){
+			File fr1 = new File(Config.SAVE_PATH+filename);
+			BufferedReader r1 = new BufferedReader(new FileReader(fr1));
+			String line = "";
+			while((line = r1.readLine())!=null){
+				JSONObject user = JSONObject.fromObject(line);
+				String uid = user.getString("id");
+				vfri_set.add(uid);
+			}
+			r1.close();
+		}
+		SaveInfo.saveDict("Config\\Dict_Fri.txt",vfri_set,false,0);
 	}
 	private static void getVFriDict(String ... filenames) throws IOException {
 		Set<String> vfri_set = new HashSet<String>();

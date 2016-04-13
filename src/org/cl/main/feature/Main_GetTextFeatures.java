@@ -7,7 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import org.cl.configuration.Config;
-import org.cl.run.GetTextualFeatures;
+import org.cl.run.GetTextlFeatures;
 import org.cl.service.GetInfo;
 import org.cl.service.MyRejectHandler;
 import org.cl.service.RWUid;
@@ -17,18 +17,16 @@ import org.cl.service.SaveInfo;
  * @author Administrator
  * params :文件名
  */
-public class Main_GetTextualFeatures {
+public class Main_GetTextFeatures {
 	private static ThreadPoolExecutor threadPool = new ThreadPoolExecutor(Config.corePoolSize,Config.maximumPoolSize,Config.keepAliveTime,
 			Config.unit,new LinkedBlockingQueue<Runnable>(),new MyRejectHandler());
 	
 	private static void initEnvironment() {
 		SaveInfo.mkdir("Feature_Textual");
 		SaveInfo.mkdir("Feature_Textual\\Text");
-		SaveInfo.mkdir("Feature_Textual\\POS");
 	}
 	public static void idFilter(RWUid y_ids) throws IOException{
 		GetInfo.idfilter_dirId(y_ids, "Feature_Textual\\Text");
-		GetInfo.idfilter_dirId(y_ids, "Feature_Textual\\POS");
 	}
 	public static void main(String args[]) throws IOException, InterruptedException
 	{	
@@ -37,12 +35,10 @@ public class Main_GetTextualFeatures {
 		idFilter(y_ids);
 		Map<String,Integer> word_dict = new HashMap<String,Integer>();
 		GetInfo.getDict("Config\\Dict_Text.txt",word_dict);
-		Map<String,Integer> word_type_dict = new HashMap<String,Integer>();
-		GetInfo.getDict("Config\\Dict_POS.txt",word_type_dict);
 		
 		String uid = null;
 		while (null!=(uid = y_ids.getUid())) {
-			GetTextualFeatures getTextualFeatures=new GetTextualFeatures(uid,word_dict,word_type_dict);
+			GetTextlFeatures getTextualFeatures=new GetTextlFeatures(uid,word_dict);
 			threadPool.execute(getTextualFeatures);
 		}
 		

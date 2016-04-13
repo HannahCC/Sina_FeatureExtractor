@@ -23,8 +23,8 @@ public class Main_GetFriFolFeature {
 		GetInfo.getSetMap("UidInfo_friends0.txt", uid_fri_map, "id", "uids");
 
 		Map<String, Integer> src_dict = new HashMap<String, Integer>();
-		GetInfo.getDict("Config\\Dict_VFri.txt", src_dict);
-		String result_filename = "Feature_Relation\\VFri_feature.txt";
+		GetInfo.getDict("Config\\Dict_Fri.txt", src_dict);
+		String result_filename = "Feature_Relation\\Fri_feature.txt";
 		
 		RWUid y_ids = GetInfo.getUID("ExpandID0.txt");
 
